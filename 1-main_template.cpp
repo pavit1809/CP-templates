@@ -54,6 +54,7 @@ mt19937                             rng(chrono::steady_clock::now().time_since_e
 
 /**************************************************************************************************************/
 int spf[1000001];
+inline int read(){int val = 0; char ch;for(ch = getchar(); ch<'0' || ch>'9'; ch = getchar());for(; ch>='0' and ch<='9'; ch = getchar()) val = val*10 + ch - '0';return val;}
 inline void take_input(int A[],int n){for(int i=0;i<n;i++){ cin>>A[i];}}
 inline void show(int *A,int n){for(int i=0;i<n;i++){cout<<A[i]<<" ";}cout<<nl;}
 inline int countDivisibles(int a,int b,int c){if (a%c==0){return (b/c-a/c+1);} return (b/c-a/c);}
@@ -65,11 +66,15 @@ inline string getstr(int n){ostringstream ss;ss<<n; string res=ss.str();return r
 inline int modulo(int a,int b){return (b+(a%b))%b;} 
 inline int getascii(char ch){return (int)ch;}
 int expo(int n,int x){int ans=1;while (x>0){if (x&1){ans*=n;} x=x>>1; n=n*n;} return ans;}
-int modexpo(int n,int x,int mod){int ans=1;while (x>0){if (x%1){ans=((ans%mod)*(n%mod))%mod;} x=x>>1; n=(n*n)%mod;} return ans;}
+int expo(int a, int b, int mod){int res=1; while(b>0){if (b&1)res=(res*a)%mod;a=(a*a)%mod;b=b>>1;} return res;}
+int expo(int a,int b,int c,int mod){return expo(a,expo(b,c,mod-1),mod);}
 int nCr(int n,int r){int ans=1;if (n-r<r){r=n-r;}for(int i=0;i<r;i++){ans*=(n-i);ans/=(i+1);} return ans;}
 void smallpf(int n=1000001){init1d(spf,1000001,0);spf[1]=0;for(int i=2;i<=1000000;i++){if (spf[i]==0){spf[i]=i;for(int j=2*i;j<=1000000;j+=i){if (spf[j]==0){spf[j]=i;}}}}}
 vi sieve(int n) {int*arr = new int[n + 1](); vector<int> vect; for (int i = 2; i <= n; i++)if (arr[i] == 0) {vect.push_back(i); for (int j = 2 * i; j <= n; j += i)arr[j] = 1;} return vect;}
-vi pfs(int n){vi ans;while (n>1){ans.pb(spf[n]);n=n/spf[n];}return ans;}
+vi pfs(int n){vi ans;while (n>1){ans.pb(spf[n]);n=n/spf[n];}ans.pb(1);return ans;}
+int gcdext(int a,int b,int *x,int *y){if (a==0){*x=0,*y=1;return b;}int x1,y1;int gcd=gcdext(b%a,a,&x1,&y1);*x=y1-(b/a)*x1;*y=x1;return gcd;}
+int modinv(int b,int m){int x,y;int g=gcdext(b,m,&x,&y);if (g!=-1){return -1;}return (x%m+m)%m;}
+int moddiv(int a,int b,int m){a=a%m;int inv=modinv(b,m);return (inv*a)%m;}
 template<typename T>
 void show_vect(vector<T> v){for(int i=0;i<v.size()-1;i++){cout<<v[i]<<" ";}cout<<v[v.size()-1];cout<<nl;}
 template<typename T>
@@ -100,8 +105,7 @@ void p_g_t()
     freopen("output.in", "w", stdout);
     freopen("error.in","w",stderr);
     #endif
-
-} 			
+} 		 		
 // Driver Code
 void solve()
 {
@@ -111,8 +115,8 @@ int32_t main()
 { 	
     p_g_t();
     int t=1;
-    //take input iff there are multiple tcs
-    // cin>>t;
+    //take input iff there are multiple tcs 
+    cin>>t;
     while (t--)
     {
     	solve();
